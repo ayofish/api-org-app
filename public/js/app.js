@@ -1,14 +1,20 @@
 (function() {
     'use strict';
-    angular.module('yoyotest', ['ngResource', 'ngSanitize', 'ngRoute', 'ui.bootstrap', 'validation.match'])
+    angular.module('yoyotest', ['ngResource', 'ngSanitize', 'ngRoute'])
         .config(function($routeProvider, $locationProvider) {
             $routeProvider
                 .when('/', {
                     templateUrl: 'templates/main.html',
-                    controller: 'MainCtrl'
+                    controller: 'MainCtrl',
+                    controllerAs: 'vm'
+                }).when('/notes', {
+                    templateUrl: 'templates/notes.html',
+                    controller: 'NotesCtrl',
+                    controllerAs: 'vm'
                 }).when('/todos', {
                     templateUrl: 'templates/todos.html',
-                    controller: 'TodosCtrl'
+                    controller: 'TodosCtrl',
+                    controllerAs: 'vm'
                 }).otherwise({
                     redirectTo: '/'
                 });

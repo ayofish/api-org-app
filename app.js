@@ -1,14 +1,20 @@
 var express = require('express');
-var path = require('path');
+var mongoose = require('mongoose');
+var mongoConfig = require('./config/mongodb');
+var expressConfig = require('./config/express');
+var routes = require('./routes');
 
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+// Connect to MongoDB
+mongoose.connect(mongoConfig.mongo.uri, mongoConfig.mongo.options);
+mongoose.connection.on('error', function(err) {
+  console.error('MongoDB connection error: ' + err);
+  process.exit(-1);
+});
 
 // Setup server
 var app = express();
 
-var expressConfig = require('./config/express');
-var routes = require('./routes');
+
 expressConfig(app);
 routes(app);
 

@@ -1,0 +1,58 @@
+<div class="container">
+    <!-- notes form -->
+    <div class="row">
+        <div class="panel panel-default">
+            <!-- <div class="panel-heading">Panel Heading</div> -->
+            <div class="panel-body">
+                <form class="form">
+                    <fieldset>
+                        <!-- Form Name -->
+                        <!-- <legend>Tasterrific Food!</legend> -->
+                        <!-- Text input: title-->
+                        <div class="form-group">
+                            <!-- <label class="control-label" for="title">title</label> -->
+                            <div>
+                                <input id="title" name="title" type="text" placeholder="title" class="form-control input-md" ng-model="vm.title">
+                                <!-- <span class="help-block">The title of the post</span> -->
+                            </div>
+                        </div>
+                        <!-- Textarea: text -->
+                        <div class="form-group">
+                            <!-- <label class="control-label" for="text">note</label> -->
+                            <textarea class="form-control" id="text" name="text" ng-model="vm.text" placeholder="Type in your note"></textarea>
+                            <!-- <span class="help-block"># for food tags, @ for other Posts or People</span> -->
+                        </div>
+                        <!-- Button (Double): submit -->
+                        <div class="form-group">
+                            <div class="col-md-5 col-lg-5 col-sm-5 col-xs-5 col-md-offset-7 col-lg-offset-7 col-sm-offset-7 col-xs-offset-7 text-right">
+                                <button id="savebutton" name="savebutton" class="btn btn-primary" ng-click="vm.doSave()">save</button>
+                                <button id="cancelbutton" name="cancelbutton" class="btn btn-warning" ng-click="vm.doCancel()">cancel</button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- notes list -->
+    <div class="row">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h2 class="panel-title">
+                   Notes
+                    </h2>
+            </div>
+            <div class="list-group">
+                <div class="list-group-item">
+                    <input type="text" ng-model="moodfilter" class="form-control" placeholder="Find Note" />
+                </div>
+                <div class="list-group-item" ng-class="{active: mood.yesorno}" ng-repeat="note in vm.notes | filter:moodfilter">
+                    <button class="btn btn-default pull-right" type="button" ng-click="vm.removeNote(note)"> <span class="glyphicon glyphicon-remove"></span> </button>
+                    <h4>{{note.title}}</h4>
+                    <p>{{note.text}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
