@@ -4,7 +4,6 @@ var _ = require('lodash');
 // Get list of notes
 exports.index = function(req, res) {
   Notes.find().sort({dateCreated: -1}).exec(function (err, notes) {
-    console.log(notes);
     if(err) { return handleError(res, err); }
     // return res.json(200, notes);
     return res.status(200).json(notes);

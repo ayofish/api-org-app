@@ -1,51 +1,52 @@
-// var Mood = require('./mood.model');
+var Todos = require('./todo.model');
+var _ = require("lodash");
 
-// Get list of moods
+// Get list of todos
 exports.index = function(req, res) {
-  // Mood.find(function (err, moods) {
-  //   if(err) { return handleError(res, err); }
-  //   return res.json(200, moods);
-  // });
-  res.json(200, [{a:1}, {a:2}]);
+  Todos.find().sort({dateCreated: -1}).exec(function (err, todos) {
+    console.log(todos);
+    if(err) { return handleError(res, err); }
+    return res.status(200).json(todos);
+  });
 };
 
-// Get a single mood
+// Get a single todo
 exports.show = function(req, res) {
-  Mood.findById(req.params.id, function (err, mood) {
+  Todos.findById(req.params.id, function (err, todo) {
     if(err) { return handleError(res, err); }
-    if(!mood) { return res.send(404); }
-    return res.json(mood);
+    if(!todo) { return res.send(404); }
+    return res.json(todo);
   });
 };
 
-// Creates a new mood in the DB.
+// Creates a new todo in the DB.
 exports.create = function(req, res) {
-  Mood.create(req.body, function(err, mood) {
+  Todos.create(req.body, function(err, todo) {
     if(err) { return handleError(res, err); }
-    return res.json(201, mood);
+    return res.json(201, todo);
   });
 };
 
-// Updates an existing mood in the DB.
+// Updates an existing todo in the DB.
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
-  Mood.findById(req.params.id, function (err, mood) {
+  Todos.findById(req.params.id, function (err, todo) {
     if (err) { return handleError(res, err); }
-    if(!mood) { return res.send(404); }
-    var updated = _.merge(mood, req.body);
+    if(!todo) { return res.send(404); }
+    var updated = _.merge(todo, req.body);
     updated.save(function (err) {
       if (err) { return handleError(res, err); }
-      return res.json(200, mood);
+      return res.json(200, todo);
     });
   });
 };
 
-// Deletes a mood from the DB.
+// Deletes a todo from the DB.
 exports.destroy = function(req, res) {
-  Mood.findById(req.params.id, function (err, mood) {
+  Todos.findById(req.params.id, function (err, todo) {
     if(err) { return handleError(res, err); }
-    if(!mood) { return res.send(404); }
-    mood.remove(function(err) {
+    if(!todo) { return res.send(404); }
+    todo.remove(function(err) {
       if(err) { return handleError(res, err); }
       return res.send(204);
     });

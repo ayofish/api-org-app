@@ -1,2 +1,56 @@
-test todos
-{{test}}
+<div class="container">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="todolist not-done">
+                    <h1>Todos</h1>
+                    <div class="input-group">
+                        <input type="text" class="form-control add-todo" placeholder="Add todo" ng-model="vm.todoText">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary" ng-click="vm.addToDo()">Save</button>
+                        </div>
+                    </div>
+                    <br/>
+                    <button class="btn btn-success" ng-click="vm.setMarkAllDone()" ng-show="vm.todosLeft > 0">Mark all as done</button>
+                    <hr ng-show="vm.todosLeft > 0">
+                    <ul class="list-unstyled" ng-show="vm.showTodos">
+                        <li class="ui-state-default" ng-repeat="todo in vm.todos | filter:vm.isNotDoneFilter">
+                            <div class="checkbox" ng-show="!todo.editing">
+                                <label>
+                                    <input type="checkbox" ng-model="todo.done" ng-change="vm.setDoneTodo(todo)" />{{todo.text}}</label>
+                                <button class="btn btn-default btn-xs pull-right" ng-click="vm.setEditTodo(todo)"><span class="glyphicon glyphicon-pencil"></span></button>
+                            </div>
+                            <div class="input-group" ng-show="todo.editing">
+                                <input type="text" class="form-control add-todo" value="{{todo.text}}" ng-model="todo.tempText">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-warning" ng-click="vm.doCancelSave(todo)">Cancel</button>
+                                    <button class="btn btn-primary" ng-click="vm.doSaveTodo(todo, val)">Save</button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="todo-footer" ">
+                        <strong><span class="count-todos"></span></strong> Items Left {{vm.todosLeft}}
+                    </div>
+                </div>
+            </div>
+            <!-- done todos -->
+            <div class="col-md-6" ng-show="vm.showTodos">
+                <div class="todolist">
+                    <h1>Done Items</h1>
+                    <hr>
+                    <ul id="done-items" class="list-unstyled">
+                        <li ng-repeat="todo in vm.todos | filter:vm.isDoneFilter">
+                            <input type="checkbox" ng-model="todo.done" ng-change="vm.setDoneTodo(todo)" />
+                            </label>{{todo.text}}
+                            <button class="remove-item btn btn-default btn-xs pull-right" ng-click="vm.removeToDo(todo)"><span class="glyphicon glyphicon-remove"></span></button>
+                        </li>
+                    </ul>
+                    <div class="todo-footer">
+                        <strong><span class="count-todos"></span></strong> Items Done {{vm.todosDone}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -6,7 +6,7 @@
      * @param {[type]} $scope       [description]
      * @param {[type]} NotesService [description]
      */
-    var NotesCtrl = function($scope, NotesService, $uibModal, $uibModalInstance) {
+    var NotesCtrl = function($scope, NotesService) {
         this.text = "";
         this.title = "";
         this.noteid = null;
@@ -16,8 +16,6 @@
         this.notesService = NotesService;
         this.$scope = $scope;
         this.notes = [];
-        this.$uibModal = $uibModal;
-        this.$uibModalInstance = $uibModalInstance;
         this.showNotes = false;
         this.noteToDelete = null;
         this.fetchNotes();
@@ -37,6 +35,9 @@
         },
         setNotes: function(notes) {
             this.notes = notes;
+            this.setShowNotes();
+        },
+        setShowNotes: function() {
             if (this.notes.length > 0) {
                 this.showNotes = true;
             } else {
@@ -56,6 +57,7 @@
             }).then(function(res) {
                 //put at the top of the array
                 self.notes.splice(0, 0, res.data);
+                self.setShowNotes();
             });
             this.resetNoteData();
         },
@@ -123,8 +125,9 @@
             var self = this;
             if (this.noteToDelete !== null) {
                 this.notesService.remove(this.noteToDelete._id).then(function(res) {
-                    _.remove(self.notes, {_id: self.noteToDelete._id});
+                    _.remove(self.notes, { _id: self.noteToDelete._id });
                     self.noteToDelete = null;
+                    self.setShowNotes();
                     $('#confirm-delete').modal('hide');
                 });
             }
@@ -134,10 +137,10 @@
 
     /**
      * @ngdoc function
-     * @name lottoApp.controller:MainCtrl
+     * @name yoyotest.controller:NotesCtrl
      * @description
-     * # MainCtrl
-     * Controller of the lottoApp
+     * # NotesCtrl
+     * Controller of the yoyotest app
      */
     angular.module('yoyotest')
         .controller('NotesCtrl', ['$scope', 'NotesService', NotesCtrl]);

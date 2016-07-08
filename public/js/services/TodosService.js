@@ -9,7 +9,7 @@
      * Factory in the yoyotest application.
      */
     angular.module('yoyotest')
-        .factory('TodosService', function() {
+        .factory('TodosService', ["$http", function($http) {
             // Service logic
             // service url
             var serviceUrl = "/api/todos";
@@ -30,7 +30,7 @@
                     if (!_.isUndefined(id) && !_.isEmpty(id)) {
                         return $http.get(serviceUrl + '/' + id);
                     } else {
-                        return $http.get(appConfig.apiUrls.tastemoods);
+                        return $http.get(serviceUrl);
                     }
                 },
                 update: function(id, data) {
@@ -42,6 +42,6 @@
 
             // return the api here
             return TodosApi;
-        });
+        }]);
 
 })();
