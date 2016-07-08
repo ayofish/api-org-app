@@ -1,4 +1,5 @@
 var Notes = require('./notes.model');
+var _ = require('lodash');
 
 // Get list of notes
 exports.index = function(req, res) {
