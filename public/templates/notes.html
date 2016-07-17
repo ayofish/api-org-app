@@ -35,8 +35,12 @@
             </div>
             <div class="list-group">
                 <div class="list-group-item" ng-repeat="note in vm.notes">
-                    <button class="btn btn-default pull-right" type="button" ng-click="vm.removeNote(note)"> <span class="glyphicon glyphicon-remove"></span> </button>
-                    <button class="btn btn-default pull-right" type="button" ng-click="vm.editNote(note)"> <span class="glyphicon glyphicon-pencil"></span> </button>
+                    <button class="btn btn-danger pull-right" title="Remove Note" type="button" ng-click="vm.removeNote(note)"> <span class="glyphicon glyphicon-remove"></span> </button>
+
+                    <button class="btn btn-info pull-right" title="Edit Note" type="button" ng-click="vm.editNote(note)"> <span class="glyphicon glyphicon-pencil"></span> </button>
+
+                    <button class="btn btn-primary pull-right" title="Add to TODO" type="button" ng-click="vm.convertToTodo(note)"> <span class="glyphicon glyphicon glyphicon-check"></span> </button>
+
                     <h4>{{note.title}}</h4>
                     <p>{{note.text}}</p>
                 </div>

@@ -132,6 +132,15 @@
                 });
             }
         },
+
+        /**
+         * Event handler for converting a note to a todo item
+         * @param  {Object} note model object
+         * @return {void}
+         */
+        convertToTodo: function(note){
+
+        }
     };
 
 
