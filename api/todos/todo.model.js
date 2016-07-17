@@ -5,6 +5,10 @@ var TodosSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    title: {
+        type: String,
+        default: ""
+    },
     text: String,
     dateCreated: {
         type: Date,

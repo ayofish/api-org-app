@@ -6,7 +6,7 @@
      * @param {[type]} $scope       [description]
      * @param {[type]} NotesService [description]
      */
-    var NotesCtrl = function($scope, NotesService) {
+    var NotesCtrl = function($scope, NotesService, TodosService) {
         this.text = "";
         this.title = "";
         this.noteid = null;
@@ -14,10 +14,12 @@
         this.noteToEditTitle = "";
         this.noteToEditNoteid = null;
         this.notesService = NotesService;
+        this.todosService = TodosService;
         this.$scope = $scope;
         this.notes = [];
         this.showNotes = false;
         this.noteToDelete = null;
+        this.noteConversion = false;
         this.fetchNotes();
         return this;
     };
@@ -49,17 +51,20 @@
          * @return {void}
          */
         doSave: function() {
-            var self = this;
-            //new note
-            this.notesService.create({
-                title: this.title,
-                text: this.text
-            }).then(function(res) {
-                //put at the top of the array
-                self.notes.splice(0, 0, res.data);
-                self.setShowNotes();
-            });
-            this.resetNoteData();
+            // no point saving an empty note
+            if (!_.isEmpty(this.text)) {
+                var self = this;
+                //new note
+                this.notesService.create({
+                    title: this.title,
+                    text: this.text
+                }).then(function(res) {
+                    //put at the top of the array
+                    self.notes.splice(0, 0, res.data);
+                    self.setShowNotes();
+                });
+                this.resetNoteData();
+            }
         },
         /**
          * clear the current form
@@ -138,8 +143,27 @@
          * @param  {Object} note model object
          * @return {void}
          */
-        convertToTodo: function(note){
-
+        convertToTodo: function(note) {
+            var self = this;
+            this.noteToDelete = note;
+            //delete the note
+            //create a new todo with the same data
+            this.todosService.create({
+                text: note.text,
+                title: note.title
+            }).then(function(res) {
+                //scroll to the top of the page to see the alert notification
+                window.scrollTo(0, 0);
+                self.confirmDelete();
+                self.setNoteConversion(true);
+            });
+        },
+        /**
+         * setter for the note conversion value finished
+         * @param {Boolean} bVal
+         */
+        setNoteConversion: function(bVal) {
+            this.noteConversion = bVal;
         }
     };
 
@@ -152,6 +176,6 @@
      * Controller of the yoyotest app
      */
     angular.module('yoyotest')
-        .controller('NotesCtrl', ['$scope', 'NotesService', NotesCtrl]);
+        .controller('NotesCtrl', ['$scope', 'NotesService', 'TodosService', NotesCtrl]);
 
 })();

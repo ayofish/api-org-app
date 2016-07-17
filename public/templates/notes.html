@@ -1,4 +1,7 @@
 <div class="container">
+    <div class="row">
+        <h1>Notes</h1>
+    </div>
     <!-- notes form -->
     <div class="row">
         <div class="panel panel-default">
@@ -27,6 +30,12 @@
             </div>
         </div>
     </div>
+    <!-- alerts section -->
+    <!-- alert to show successful conversion of a note to a todo -->
+    <div class="alert alert-success fade in" ng-show="vm.noteConversion">
+        <button class="close" data-dismiss="alert" aria-label="close" ng-click="vm.setNoteConversion(false)">&times;</button>
+        <strong>Success!</strong> Your note has been changed to a todo item!<a class="btn btn-link" href="/todos">Click here</a>to see your todo items.
+    </div>
     <!-- notes list -->
     <div class="row" ng-show="vm.showNotes">
         <div class="panel panel-primary">
@@ -36,11 +45,8 @@
             <div class="list-group">
                 <div class="list-group-item" ng-repeat="note in vm.notes">
                     <button class="btn btn-danger pull-right" title="Remove Note" type="button" ng-click="vm.removeNote(note)"> <span class="glyphicon glyphicon-remove"></span> </button>
-
                     <button class="btn btn-info pull-right" title="Edit Note" type="button" ng-click="vm.editNote(note)"> <span class="glyphicon glyphicon-pencil"></span> </button>
-
                     <button class="btn btn-primary pull-right" title="Add to TODO" type="button" ng-click="vm.convertToTodo(note)"> <span class="glyphicon glyphicon glyphicon-check"></span> </button>
-
                     <h4>{{note.title}}</h4>
                     <p>{{note.text}}</p>
                 </div>

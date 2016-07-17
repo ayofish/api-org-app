@@ -6,9 +6,11 @@
      * @param {[type]} $scope       [description]
      * @param {[type]} TodosService [description]
      */
-    var TodosCtrl = function($scope, TodosService) {
+    var TodosCtrl = function($scope, TodosService, NotesService) {
         this.todoText = "";
         this.todosService = TodosService;
+        this.notesService = NotesService;
+        this.todoConversion = false;
         this.$scope = $scope;
         this.todos = [];
         this.showTodos = false;
@@ -43,20 +45,24 @@
             this.setShowTodos();
         },
         //set the count of todos that are not yet done
-        setTodosLeft: function(){
+        setTodosLeft: function() {
             this.todosLeft = this.todos.filter(this.isNotDoneFilter).length;
         },
         //set the count of the done todos
-        setTodosDone: function(){
+        setTodosDone: function() {
             this.todosDone = this.todos.filter(this.isDoneFilter).length;
         },
         //mark all todos as done
-        setMarkAllDone: function(){
-            for(var i=0;i<this.todos.length;i++){
+        setMarkAllDone: function() {
+            for (var i = 0; i < this.todos.length; i++) {
                 var todo = this.todos[i];
                 todo.done = true;
                 this.doSaveTodo(todo);
             }
+        },
+        // sets the todo conversion finished class attribute
+        setTodoConversion: function(bVal) {
+            this.todoConversion = bVal;
         },
         //check if we need to show the todos
         setShowTodos: function() {
@@ -84,13 +90,13 @@
             if (todo && todo.editing) {
                 delete todo.editing;
             }
-            if(todo && todo.tempText){
+            if (todo && todo.tempText) {
                 delete todo.tempText;
             }
         },
 
         doSaveTodo: function(todo) {
-            if(todo.tempText){
+            if (todo.tempText) {
                 todo.text = todo.tempText;
             }
             var self = this;
@@ -113,18 +119,25 @@
          * @return {void}
          */
         addToDo: function() {
-            var self = this;
-            //new note
-            this.todosService.create({
-                text: this.todoText
-            }).then(function(res) {
-                //put at the top of the array
-                self.todos.splice(0, 0, res.data);
-                self.setShowTodos();
-                self.todoText = "";
-            });
+            // lets not add blank todo items
+            if (!_.isEmpty(this.todoText)) {
+                var self = this;
+                //new note
+                this.todosService.create({
+                    text: this.todoText
+                }).then(function(res) {
+                    //put at the top of the array
+                    self.todos.splice(0, 0, res.data);
+                    self.setShowTodos();
+                    self.todoText = "";
+                });
+            }
         },
-
+        /**
+         * Deletes a todo item
+         * @param  {Object} todo
+         * @return {void}
+         */
         removeToDo: function(todo) {
             var self = this;
             if (todo._id) {
@@ -134,6 +147,34 @@
                 });
             }
         },
+
+        /**
+         * Converts a todo item to a note
+         * @param  {Object} todo
+         * @return {void}
+         */
+        convertToNote: function(todo) {
+            var self = this;
+            var title = "";
+            //no title so use a no title message as the note title
+            if (_.isEmpty(todo.title)) {
+                title = "No Title";
+            } else {
+                //just use the old note title
+                title = todo.title;
+            }
+            //create a new todo with the same data
+            this.notesService.create({
+                text: todo.text,
+                title: title
+            }).then(function(res) {
+                //scroll to the top of the page to see the alert notification
+                window.scrollTo(0, 0);
+                //delete the todo
+                self.removeToDo(todo);
+                self.setTodoConversion(true);
+            });
+        }
     };
 
 
@@ -145,6 +186,6 @@
      * Controller of the lottoApp
      */
     angular.module('yoyotest')
-        .controller('TodosCtrl', ['$scope', 'TodosService', TodosCtrl]);
+        .controller('TodosCtrl', ['$scope', 'TodosService', 'NotesService', TodosCtrl]);
 
 })();
