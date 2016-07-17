@@ -4,9 +4,7 @@
         .config(function($routeProvider, $locationProvider) {
             $routeProvider
                 .when('/', {
-                    templateUrl: 'templates/main.html',
-                    controller: 'MainCtrl',
-                    controllerAs: 'vm'
+                    redirectTo: '/notes'
                 }).when('/notes', {
                     templateUrl: 'templates/notes.html',
                     controller: 'NotesCtrl',
@@ -16,7 +14,7 @@
                     controller: 'TodosCtrl',
                     controllerAs: 'vm'
                 }).otherwise({
-                    redirectTo: '/'
+                    redirectTo: '/notes'
                 });
 
             $locationProvider.html5Mode(true);
